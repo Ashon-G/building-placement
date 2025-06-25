@@ -12,10 +12,28 @@ const BUILDING_COSTS = {
 };
 
 // Dummy building type enum
-const BUILDING_TYPES = ['residential', 'commercial', 'park', 'factory', 'church'] as const;
-type BuildingType = typeof BUILDING_TYPES[number];
+export const BUILDING_TYPES = ['residential', 'commercial', 'park', 'factory', 'church'] as const;
+export type BuildingType = typeof BUILDING_TYPES[number];
 
-const GameDrawer = ({ onSelectBuilding, currency }: { onSelectBuilding: (type: BuildingType) => void; currency: number }) => {
+export const BUILDING_MODELS: Record<BuildingType, string> = {
+  residential:
+    'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Box/glTF-Binary/Box.glb',
+  commercial:
+    'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Box/glTF-Binary/Box.glb',
+  park:
+    'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Box/glTF-Binary/Box.glb',
+  factory:
+    'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Box/glTF-Binary/Box.glb',
+  church:
+    'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Box/glTF-Binary/Box.glb',
+};
+
+export interface GameDrawerProps {
+  onSelectBuilding: (type: BuildingType) => void;
+  currency: number;
+}
+
+const GameDrawer = ({ onSelectBuilding, currency }: GameDrawerProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleSelectBuilding = (type: BuildingType) => {
@@ -93,20 +111,7 @@ const GameDrawer = ({ onSelectBuilding, currency }: { onSelectBuilding: (type: B
   );
 };
 
-export default function App() {
-  const [currency, setCurrency] = useState(200);
-
-  const handleBuild = (type: BuildingType) => {
-    Alert.alert('Build Confirmed', `You chose to build: ${type}`);
-    setCurrency((prev) => prev - BUILDING_COSTS[type]);
-  };
-
-  return (
-    <View style={{ flex: 1, backgroundColor: '#111', justifyContent: 'center' }}>
-      <GameDrawer currency={currency} onSelectBuilding={handleBuild} />
-    </View>
-  );
-}
+export default GameDrawer;
 
 const styles = StyleSheet.create({
   fabContainer: {
