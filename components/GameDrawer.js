@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, ScrollView, StyleSheet, Alert } from 'rea
 import { FontAwesome5, MaterialIcons, Entypo, Ionicons } from '@expo/vector-icons';
 
 // Mock Data
-const BUILDING_COSTS = {
+export const BUILDING_COSTS = {
   residential: 100,
   commercial: 150,
   park: 80,
@@ -12,13 +12,25 @@ const BUILDING_COSTS = {
 };
 
 // Dummy building type enum
-const BUILDING_TYPES = ['residential', 'commercial', 'park', 'factory', 'church'] as const;
-type BuildingType = typeof BUILDING_TYPES[number];
+export const BUILDING_TYPES = ['residential', 'commercial', 'park', 'factory', 'church'];
 
-const GameDrawer = ({ onSelectBuilding, currency }: { onSelectBuilding: (type: BuildingType) => void; currency: number }) => {
+export const BUILDING_MODELS = {
+  residential:
+    'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Box/glTF-Binary/Box.glb',
+  commercial:
+    'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Box/glTF-Binary/Box.glb',
+  park:
+    'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Box/glTF-Binary/Box.glb',
+  factory:
+    'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Box/glTF-Binary/Box.glb',
+  church:
+    'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Box/glTF-Binary/Box.glb',
+};
+
+const GameDrawer = ({ onSelectBuilding, currency }) => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleSelectBuilding = (type: BuildingType) => {
+  const handleSelectBuilding = (type) => {
     const cost = BUILDING_COSTS[type];
     if (currency < cost) {
       Alert.alert("Not enough funds", `You need ${cost} coins to build this.`);
@@ -76,13 +88,13 @@ const GameDrawer = ({ onSelectBuilding, currency }: { onSelectBuilding: (type: B
               <TouchableOpacity
                 key={b.type}
                 style={[styles.card, { backgroundColor: b.color + '33' }]} // Slight transparency
-                onPress={() => handleSelectBuilding(b.type as BuildingType)}
+                onPress={() => handleSelectBuilding(b.type)}
               >
                 <View style={styles.iconContainer}>{b.icon}</View>
                 <Text style={styles.label}>{b.label}</Text>
                 <View style={styles.costContainer}>
                   <FontAwesome5 name="coins" size={12} color="#fff" />
-                  <Text style={styles.costText}>{BUILDING_COSTS[b.type as BuildingType]} coins</Text>
+                  <Text style={styles.costText}>{BUILDING_COSTS[b.type]} coins</Text>
                 </View>
               </TouchableOpacity>
             ))}
@@ -93,20 +105,7 @@ const GameDrawer = ({ onSelectBuilding, currency }: { onSelectBuilding: (type: B
   );
 };
 
-export default function App() {
-  const [currency, setCurrency] = useState(200);
-
-  const handleBuild = (type: BuildingType) => {
-    Alert.alert('Build Confirmed', `You chose to build: ${type}`);
-    setCurrency((prev) => prev - BUILDING_COSTS[type]);
-  };
-
-  return (
-    <View style={{ flex: 1, backgroundColor: '#111', justifyContent: 'center' }}>
-      <GameDrawer currency={currency} onSelectBuilding={handleBuild} />
-    </View>
-  );
-}
+export default GameDrawer;
 
 const styles = StyleSheet.create({
   fabContainer: {
