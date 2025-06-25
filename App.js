@@ -3,15 +3,14 @@ import { SafeAreaView, StyleSheet } from 'react-native';
 import GameDrawer, {
   BUILDING_COSTS,
   BUILDING_MODELS,
-  BuildingType,
 } from './components/GameDrawer';
 import PlacementGrid from './components/PlacementGrid';
 
 export default function App() {
   const [currency, setCurrency] = useState(200);
-  const [selected, setSelected] = useState<BuildingType | null>(null);
+  const [selected, setSelected] = useState(null);
 
-  const handleSelectBuilding = (type: BuildingType) => {
+  const handleSelectBuilding = (type) => {
     if (currency >= BUILDING_COSTS[type]) {
       setSelected(type);
     }
